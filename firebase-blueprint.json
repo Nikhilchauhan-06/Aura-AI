@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "organization": {
+      "title": "Organization",
+      "description": "Enterprise organization using the platform",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "industry": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "createdAt"]
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "description": "Executive dashboard configuration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["executive", "financial", "sales", "employee", "customer"] },
+        "ownerId": { "type": "string" },
+        "orgId": { "type": "string" },
+        "layout": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "type", "ownerId", "orgId", "createdAt"]
+    },
+    "analyticsData": {
+      "title": "AnalyticsData",
+      "description": "Structured business data points",
+      "type": "object",
+      "properties": {
+        "dashboardId": { "type": "string" },
+        "data": { "type": "string", "description": "JSON string of data points" },
+        "summary": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["dashboardId", "data", "updatedAt"]
+    },
+    "aiInsight": {
+      "title": "AIInsight",
+      "description": "AI-generated insights and forecasts",
+      "type": "object",
+      "properties": {
+        "targetId": { "type": "string", "description": "Dashboard or Data ID" },
+        "type": { "type": "string", "enum": ["summary", "prediction", "anomaly"] },
+        "content": { "type": "string" },
+        "metadata": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["targetId", "type", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/organizations/{orgId}": {
+      "schema": "organization",
+      "description": "Organization documents"
+    },
+    "/dashboards/{dashboardId}": {
+      "schema": "dashboard",
+      "description": "Dashboard configurations"
+    },
+    "/dashboards/{dashboardId}/analytics/current": {
+      "schema": "analyticsData",
+      "description": "The latest analytics data for a specific dashboard"
+    },
+    "/dashboards/{dashboardId}/insights/{insightId}": {
+      "schema": "aiInsight",
+      "description": "AI insights related to a dashboard"
+    },
+    "/users/{userId}": {
+      "schema": {
+        "title": "User",
+        "description": "User profile",
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "role": { "type": "string" },
+          "orgId": { "type": "string" }
+        }
+      },
+      "description": "User profile documents"
+    }
+  }
+}
